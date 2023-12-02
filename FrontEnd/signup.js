@@ -19,8 +19,9 @@ signUpForm.addEventListener('submit',(e)=>{
     .then((res)=>{
         console.log(res,"success");
     }).catch((err)=>{
+        console.log(err)
         let statusHTML = ``;
-        statusHTML+=`<font color="red">Error : `+ err.message+`</font>`;
+        statusHTML+=`<font color="red">Error : `+ err.response.data+`</font>`;
         document.getElementById('status').innerHTML = statusHTML;
     })
 })
