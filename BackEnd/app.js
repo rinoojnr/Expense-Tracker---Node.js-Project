@@ -4,7 +4,7 @@ const cors = require('cors');
 
 const sequelize = require('./util/database');
 
-const router = require('./routes/signup');
+const router = require('./routes/user');
 
 const app = express();
 

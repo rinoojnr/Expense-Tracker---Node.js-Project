@@ -13,11 +13,12 @@ loginForm.addEventListener('submit',(e)=>{
     }
     axios.post(`${baseURL}/user/login`,data)
     .then((res)=>{
-        console.log("success")
+        console.log(res)
+        alert("Login Successfully")
     })
     .catch((err)=>{
         let statusHTML = ``;
-        statusHTML+=`<font color="red">Error : `+err.message+`</font>`;
+        statusHTML+=`<font color="red">Error : `+err.response.data+`</font>`;
         document.getElementById('status').innerHTML = statusHTML
     });
 })
