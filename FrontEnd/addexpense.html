@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense App</title>
+</head>
+<body>
+    <form id="addexpense">
+        <label for="amount">Enter the Amount : </label>
+        <input type="number" id="amount">
+        <label for="description">Enter The Description : </label>
+        <input type="text" id="description">
+        <label for="category">Choose The category : </label>
+        <select id="category">
+            <option>Food</option>
+            <option>Rent</option>
+            <option>Travel</option>
+            <option>Fuel</option>
+            <option>Others</option>
+        </select>
+        <input type="submit" id="submit" value="Add Expense">
+    </form>
+    <ol id="addedexpense"></ul>
+    <script src="addexpense.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.5.1/axios.min.js"></script>
+</body>
+</html>

@@ -15,6 +15,9 @@ loginForm.addEventListener('submit',(e)=>{
     .then((res)=>{
         console.log(res)
         alert("Login Successfully")
+        let statusHTML = ``;
+        statusHTML+=``;
+        document.getElementById('status').innerHTML = statusHTML
     })
     .catch((err)=>{
         console.log(err)

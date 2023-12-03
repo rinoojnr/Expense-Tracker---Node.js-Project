@@ -23,20 +23,28 @@ exports.signUp = async(req,res)=>{
 }
 
 exports.login = async(req,res) =>{
-    console.log(req.body,"============");
-    let data = await Users.findAll({where: {useremail:req.body.email}});
-    if(data.length === 0){
-        res.status(404).json({success:false,message:"User not found"})
-    }else{
-        bcrypt.compare(req.body.password,data[0].userpassword,(err,result)=>{
-            console.log(data[0])
-            if(result === true){
-                res.status(200).json({success:true,message:`${data[0].username} is login successfully`});
-            }else{
-                res.status(400).json({success:false,message:"Password is incorrect"});
-            } 
-        })
-    }
+    try{
+        console.log(req.body,"============");
+        let data = await Users.findAll({where: {useremail:req.body.email}});
+        if(data.length === 0){
+            res.status(404).json({success:false,message:"User not found"})
+        }else{
+            bcrypt.compare(req.body.password,data[0].userpassword,(err,result)=>{
+                console.log(data[0])
+                if(result === true){
+                    res.status(200).json({success:true,message:`${data[0].username} is login successfully`});
+                    
+                }else{
+                    res.status(400).json({success:false,message:"Password is incorrect"});
+                } 
+            })
+        }
+    }catch(err){
+        res.status(400).json({success:false,message:"Error"})
+    }   
+
+
+   
     
     // console.log(data)
     // if(data.length===0){
