@@ -14,10 +14,12 @@ loginForm.addEventListener('submit',(e)=>{
     axios.post(`${baseURL}/user/login`,data)
     .then((res)=>{
         console.log(res)
-        alert("Login Successfully")
         let statusHTML = ``;
         statusHTML+=``;
-        document.getElementById('status').innerHTML = statusHTML
+        document.getElementById('status').innerHTML = statusHTML;
+        alert("Login Successfully");
+        localStorage.setItem('token',res.data.token)
+        window.location.href = "file:///home/anupama/Desktop/trackerApp/FrontEnd/addexpense.html";
     })
     .catch((err)=>{
         console.log(err)

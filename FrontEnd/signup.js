@@ -17,6 +17,7 @@ signUpForm.addEventListener('submit',(e)=>{
     }
     axios.post(`${baseURL}/user/signup`,userData)
     .then((res)=>{
+        window.location.href = "file:///home/anupama/Desktop/trackerApp/FrontEnd/login.html";
         console.log(res,"success");
     }).catch((err)=>{
         console.log(err)

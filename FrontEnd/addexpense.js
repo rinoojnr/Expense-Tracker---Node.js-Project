@@ -7,7 +7,8 @@ let addedExpense = document.getElementById('addedexpense');
 let baseURL ='http://localhost:3000';
 
 window.addEventListener('DOMContentLoaded',()=>{
-    axios.get(`${baseURL}/expense/getexpense`)
+    const token = localStorage.getItem('token');
+    axios.get(`${baseURL}/expense/getexpense`,{headers: {"Authentication" : token}})
     .then((res)=>{
         console.log(res)
         for(let i = 0;i<res.data.length;i++){
@@ -19,10 +20,12 @@ window.addEventListener('DOMContentLoaded',()=>{
 
 addExpenseForm.addEventListener('submit',(e)=>{
     e.preventDefault();
+    const token = localStorage.getItem('token');
     let expenseData = {
         amount: amount.value,
         description: description.value,
-        category: category.value
+        category: category.value,
+        userId: token
     }
     axios.post(`${baseURL}/expense/addexpense`,expenseData)
     .then((res)=>{

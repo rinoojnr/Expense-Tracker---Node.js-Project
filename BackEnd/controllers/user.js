@@ -1,4 +1,5 @@
 const bcrypt = require('bcrypt');
+const jsw = require('jsonwebtoken');
 
 const Users = require('../models/signup');
 
@@ -22,6 +23,11 @@ exports.signUp = async(req,res)=>{
     }   
 }
 
+function authentication(id){
+    return jsw.sign(id,"strongpassword");
+}
+
+
 exports.login = async(req,res) =>{
     try{
         console.log(req.body,"============");
@@ -32,7 +38,7 @@ exports.login = async(req,res) =>{
             bcrypt.compare(req.body.password,data[0].userpassword,(err,result)=>{
                 console.log(data[0])
                 if(result === true){
-                    res.status(200).json({success:true,message:`${data[0].username} is login successfully`});
+                    res.status(200).json({success:true,message:`${data[0].username} is login successfully`,token: authentication(data[0].id)});
                     
                 }else{
                     res.status(400).json({success:false,message:"Password is incorrect"});
