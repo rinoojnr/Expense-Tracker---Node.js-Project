@@ -15,13 +15,7 @@ const authentication = (req,res,next) =>{
     
 }
 
-const userid = (req,res,next) =>{
-    const user = jsw.verify(req.body.userId,"strongpassword");
-    req.id = user
-    next()
-}
-
 
 module.exports ={
-    authentication,userid
+    authentication
 }
