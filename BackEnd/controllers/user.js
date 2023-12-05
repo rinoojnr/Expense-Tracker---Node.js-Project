@@ -15,7 +15,8 @@ exports.signUp = async(req,res)=>{
         const data = await Users.create({
             username: userName,
             useremail: userEmail,
-            userpassword: passwordHash
+            userpassword: passwordHash,
+            isPremium: false
         });
         res.status(200).json(data);
     }catch(err){

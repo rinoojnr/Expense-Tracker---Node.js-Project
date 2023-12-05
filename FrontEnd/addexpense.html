@@ -21,10 +21,18 @@
         </select>
         <input type="submit" id="submit" value="Add Expense">
     </form>
-    <button type="submit"id="payment-button">Buy Premium</button>
+    <div id="buyPremiumButtondiv">
+        <button type="submit"id="payment-button">Buy Premium</button>
+    </div>
+    <button type="submit"id="show-leaderboard">Show Leader Board</button>
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <div id="status"></div>
-    <ol id="addedexpense"></ul>
+    <div>
+        <ol id="addedexpense"></ul>
+    </div>
+    <div>
+        <ul id="ldrbd"></ul>
+    </div>
     <script src="addexpense.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.5.1/axios.min.js"></script>
 </body>

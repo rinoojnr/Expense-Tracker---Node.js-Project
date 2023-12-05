@@ -1,5 +1,3 @@
-// const { options } = require("../BackEnd/routes/expens");
-
 let amount = document.getElementById('amount');
 let description = document.getElementById('description')
 let category = document.getElementById('category');
@@ -7,6 +5,8 @@ let addExpenseForm = document.getElementById('addexpense');
 let addedExpense = document.getElementById('addedexpense');
 let status = document.getElementById('status');
 let buyPremiumButton = document.getElementById('payment-button');
+let showLeaderBoard = document.getElementById('show-leaderboard');
+let leaderBoard = document.getElementById('ldrbd')
 
 let baseURL ='http://localhost:3000';
 
@@ -40,17 +40,23 @@ addExpenseForm.addEventListener('submit',(e)=>{
 
 buyPremiumButton.addEventListener('click',async(e)=>{
     const token = localStorage.getItem("token");
-    const response = await axios.get(`${baseURL}/payment/purchasepremium`,{headers: {"Authentication": token}})
+    const response = await axios.get(`${baseURL}/premium/purchase`,{headers: {"Authentication": token}})
     var options = {
             "key": response.data.key_id,
             "order_id": response.data.order.id,
             "handler": async function(response){
-                await axios.post(`${baseURL}/payment/purchasepremiumupdate`,{
+                await axios.post(`${baseURL}/premium/purchaseu`,{
                     order_id: options.order_id,
                       payment_id: response.razorpay_payment_id,
                 },{headers: {"Authentication": token}})
             alert("You are a premium user now")
-            },
+            localStorage.setItem("isPremium",true)
+            let statusHTML = ``;
+            statusHTML+=``;
+            statusHTML+=`<font color="red"> You are a premium user now </font>`;
+            document.getElementById('status').innerHTML = statusHTML;
+            document.getElementById('buyPremiumButton').value = "ShowLeader Board"
+            }
     }
     const rzp1 = new Razorpay(options);
     rzp1.open();
@@ -59,6 +65,11 @@ buyPremiumButton.addEventListener('click',async(e)=>{
     rzp1.on('payment.failed',function(response){
         console.log(response);
         alert("somthing went wrong")
+        localStorage.setItem("isPremium",false)
+        let statusHTML = ``;
+        statusHTML+=``;
+        statusHTML+=`<font color="red"> Transaction failes </font>`;
+        document.getElementById('status').innerHTML = statusHTML;
     })
 })
 
@@ -89,4 +100,26 @@ function showOnScreen(data){
             document.getElementById('status').innerHTML = statusHTML
         })
     }
+}
+
+
+showLeaderBoard.addEventListener('click',(e)=>{
+    e.preventDefault();
+    const token = localStorage.getItem("token")
+    axios.get(`${baseURL}/premium/leaderboard`,{headers: {"Authentication": token}})
+    .then((res)=>{
+        for(let i=0;i<res.data.length;i++){
+            showLeaderBoardFunction(res.data[i])
+        }
+        
+    })
+})
+
+
+function showLeaderBoardFunction(data){
+    console.log(data)
+    let li = document.createElement('li');
+    let text = document.createTextNode(`Name: ${data.amount}Rs.`);
+    li.appendChild(text);
+    leaderBoard.appendChild(li);
 }
