@@ -10,8 +10,33 @@ let leaderBoard = document.getElementById('ldrbd')
 
 let baseURL ='http://localhost:3000';
 
+function parseJwt (token) {
+    var base64Url = token.split('.')[1];
+    var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+
+    return JSON.parse(jsonPayload);
+}
+
+function showButton(name){
+    let statusHTML = ``;
+        statusHTML+=``;
+        statusHTML+=`<font color="red"> is premium user now </font>`;
+        document.getElementById('status').innerHTML = statusHTML;
+        document.getElementById('payment-button').style.visibility = 'hidden';
+}
+
 window.addEventListener('DOMContentLoaded',()=>{
     const token = localStorage.getItem('token');
+    // const isPremium = localStorage.getItem("isPremium");
+    const decodedToken = parseJwt(token);
+    console.log(decodedToken)
+    const isPremium = decodedToken.isPremium
+    if(isPremium){
+        showButton()
+    }
     axios.get(`${baseURL}/expense/getexpense`,{headers: {"Authentication" : token}})
     .then((res)=>{
         console.log(res)
@@ -45,7 +70,7 @@ buyPremiumButton.addEventListener('click',async(e)=>{
             "key": response.data.key_id,
             "order_id": response.data.order.id,
             "handler": async function(response){
-                await axios.post(`${baseURL}/premium/purchaseu`,{
+                res2 = await axios.post(`${baseURL}/premium/purchaseu`,{
                     order_id: options.order_id,
                       payment_id: response.razorpay_payment_id,
                 },{headers: {"Authentication": token}})
@@ -55,7 +80,9 @@ buyPremiumButton.addEventListener('click',async(e)=>{
             statusHTML+=``;
             statusHTML+=`<font color="red"> You are a premium user now </font>`;
             document.getElementById('status').innerHTML = statusHTML;
-            document.getElementById('buyPremiumButton').value = "ShowLeader Board"
+            document.getElementById('payment-button').style.visibility = 'hidden';
+            console.log(res2)
+            localStorage.setItem('token',res2.data.token)
             }
     }
     const rzp1 = new Razorpay(options);
@@ -108,9 +135,10 @@ showLeaderBoard.addEventListener('click',(e)=>{
     const token = localStorage.getItem("token")
     axios.get(`${baseURL}/premium/leaderboard`,{headers: {"Authentication": token}})
     .then((res)=>{
-        for(let i=0;i<res.data.length;i++){
-            showLeaderBoardFunction(res.data[i])
+        for(let i=0;i<res.data.totlaExpenseWithUser.length;i++){
+            showLeaderBoardFunction(res.data.totlaExpenseWithUser[i])
         }
+        console.log(res.data.totlaExpenseWithUser);
         
     })
 })
@@ -119,7 +147,7 @@ showLeaderBoard.addEventListener('click',(e)=>{
 function showLeaderBoardFunction(data){
     console.log(data)
     let li = document.createElement('li');
-    let text = document.createTextNode(`Name: ${data.amount}Rs.`);
+    let text = document.createTextNode(`Name: ${data.user_name} -- ${data.total_expense}Rs.`);
     li.appendChild(text);
     leaderBoard.appendChild(li);
 }

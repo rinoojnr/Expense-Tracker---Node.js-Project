@@ -2,6 +2,9 @@ const Razorpay = require('razorpay');
 
 const Purchase = require('../models/purchase');
 const Expense = require('../models/addexpense');
+const User = require('../models/signup');
+
+const auth = require('../controllers/user');
 
 const purchasepremium = async(req,res) =>{
     try{
@@ -35,8 +38,8 @@ const updateTransaction = async(req,res) =>{
         const promise1 = order.update({paymentid: payment_id,status: "SUCCESSFUL"})
         const promise2 = req.user.update({isPremium: true});
         Promise.all([promise1,promise2]).then(()=>{
-            res.status(202).json({sucess: true,message: "Transaction Successful"});
-        }).catch(()=>{
+            res.status(202).json({sucess: true,message: "Transaction Successful",token: auth.auth(order.userId,true)});
+        }).catch((err)=>{
             throw new Error(err);
         })           
     }catch(err){
@@ -46,9 +49,23 @@ const updateTransaction = async(req,res) =>{
 }
 
 const getLeaderBoard = async(req,res) =>{
-    console.log(req.user,">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>..")
-    const data = await Expense.findAll()
-    res.send(data)
+    const expense = await Expense.findAll();
+    const user = await User.findAll();
+    const totalExpense = {};
+    expense.forEach((expense)=>{
+        if(totalExpense[expense.userId]){
+            totalExpense[expense.userId] = totalExpense[expense.userId] + expense.amount
+        }else{
+            totalExpense[expense.userId] = expense.amount;
+        }
+        
+    })
+    const totlaExpenseWithUser =[];
+    user.forEach((user)=>{
+        totlaExpenseWithUser.push({user_name: user.username,total_expense: totalExpense[user.id] || 0})
+    })
+    totlaExpenseWithUser.sort((a,b)=>b.total_expense - a.total_expense);
+    res.status(201).json({success:true,totlaExpenseWithUser})
 }
 
 

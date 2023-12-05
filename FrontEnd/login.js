@@ -18,13 +18,14 @@ loginForm.addEventListener('submit',(e)=>{
         statusHTML+=``;
         document.getElementById('status').innerHTML = statusHTML;
         alert("Login Successfully");
+        console.log(res.data,"////////////////////////")
         localStorage.setItem('token',res.data.token)
         window.location.href = "file:///home/anupama/Desktop/trackerApp/FrontEnd/addexpense.html";
     })
     .catch((err)=>{
         console.log(err)
         let statusHTML = ``;
-        statusHTML+=`<font color="red">Error : `+err.response.data.message+`</font>`;
+        statusHTML+=`<font color="red">Error : `+err.response.message+`</font>`;
         document.getElementById('status').innerHTML = statusHTML
     });
 })

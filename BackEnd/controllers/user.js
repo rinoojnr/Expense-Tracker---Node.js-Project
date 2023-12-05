@@ -3,7 +3,7 @@ const jsw = require('jsonwebtoken');
 
 const Users = require('../models/signup');
 
-exports.signUp = async(req,res)=>{
+signUp = async(req,res)=>{
     const userName = req.body.name;
     const userEmail = req.body.email;
     const userPassword = req.body.password;
@@ -24,12 +24,12 @@ exports.signUp = async(req,res)=>{
     }   
 }
 
-function authentication(id){
-    return jsw.sign(id,"strongpassword");
+auth = (id,isPremium) =>{
+    return jsw.sign({userId: id,isPremium: isPremium},"strongpassword");
 }
 
 
-exports.login = async(req,res) =>{
+login = async(req,res) =>{
     try{
         console.log(req.body,"============");
         let data = await Users.findAll({where: {useremail:req.body.email}});
@@ -37,9 +37,8 @@ exports.login = async(req,res) =>{
             res.status(404).json({success:false,message:"User not found"})
         }else{
             bcrypt.compare(req.body.password,data[0].userpassword,(err,result)=>{
-                console.log(data[0])
                 if(result === true){
-                    res.status(200).json({success:true,message:`${data[0].username} is login successfully`,token: authentication(data[0].id)});
+                    res.status(200).json({success:true,message:`${data[0].username} is login successfully`,token:auth(data[0].id,data[0].isPremium)});
                     
                 }else{
                     res.status(400).json({success:false,message:"Password is incorrect"});
@@ -65,4 +64,8 @@ exports.login = async(req,res) =>{
         
     // }
     
+}
+
+module.exports = {
+    auth,login,signUp
 }
