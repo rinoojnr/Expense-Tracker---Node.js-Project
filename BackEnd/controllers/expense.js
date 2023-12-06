@@ -5,26 +5,25 @@ const User = require('../models/signup');
 const sequelize = require('../util/database');
 
 exports.addExpense = async(req,res) =>{
-    const { amount, description, category} = req.body;
     const t = await sequelize.transaction();
-    const expenseData = await Expense.create({amount,description,category,userId:req.user.id},{transaction: t});
-    const totalexpense = Number(req.user.totalexpense)+Number(amount);
-    User.update({
-        totalexpense: totalexpense
-    },{
-        where: {id:req.user.id},
-        transaction: t
-    }).then(async()=>{
-        await t.commit();
-        res.status(201).json(expenseData)
-    }).catch(async(err)=>{
-        await t.rollback
-        return res.status(500).json({success:false,error:err})
-    }).catch(async(err)=>{
+    try{
+        const { amount, description, category} = req.body;
+    
+        const expenseData = await Expense.create({amount,description,category,userId:req.user.id},{transaction: t});
+        const totalexpense = Number(req.user.totalexpense)+Number(amount);
+        await User.update({
+            totalexpense: totalexpense
+        },{
+            where: {id:req.user.id},
+            transaction: t
+        })
+            await t.commit();
+            res.status(201).json(expenseData)
+    }catch(err){
         await t.rollback();
-        return res.status(500).json({success:false,error:err})
-        
-    })
+        res.status(500).json({success:false,error:err})
+    }
+    
     
 }
 
