@@ -135,11 +135,12 @@ showLeaderBoard.addEventListener('click',(e)=>{
     const token = localStorage.getItem("token")
     axios.get(`${baseURL}/premium/leaderboard`,{headers: {"Authentication": token}})
     .then((res)=>{
-        for(let i=0;i<res.data.totlaExpenseWithUser.length;i++){
-            showLeaderBoardFunction(res.data.totlaExpenseWithUser[i])
+        console.log(res,"/////")
+        for(let i=0;i<res.data.length;i++){
+            showLeaderBoardFunction(res.data[i])
         }
         console.log(res.data.totlaExpenseWithUser);
-        
+    
     })
 })
 
@@ -147,7 +148,7 @@ showLeaderBoard.addEventListener('click',(e)=>{
 function showLeaderBoardFunction(data){
     console.log(data)
     let li = document.createElement('li');
-    let text = document.createTextNode(`Name: ${data.user_name} -- ${data.total_expense}Rs.`);
+    let text = document.createTextNode(`Name: ${data.username} -- ${data.total_cost}Rs.`);
     li.appendChild(text);
     leaderBoard.appendChild(li);
 }

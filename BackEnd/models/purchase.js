@@ -10,7 +10,7 @@ const Purchase = sequelize.define("purchase",{
         autoIncrement: true,
         primaryKey: true
     },
-    paymentid: Sequelize.INTEGER,
+    paymentid: Sequelize.STRING,
     orderid: Sequelize.STRING,
     status: Sequelize.STRING,
 })

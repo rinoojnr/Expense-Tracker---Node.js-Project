@@ -5,6 +5,8 @@ const Expense = require('../models/addexpense');
 const User = require('../models/signup');
 
 const auth = require('../controllers/user');
+const sequelize = require('../util/database');
+
 
 const purchasepremium = async(req,res) =>{
     try{
@@ -49,23 +51,22 @@ const updateTransaction = async(req,res) =>{
 }
 
 const getLeaderBoard = async(req,res) =>{
-    const expense = await Expense.findAll();
-    const user = await User.findAll();
-    const totalExpense = {};
-    expense.forEach((expense)=>{
-        if(totalExpense[expense.userId]){
-            totalExpense[expense.userId] = totalExpense[expense.userId] + expense.amount
-        }else{
-            totalExpense[expense.userId] = expense.amount;
-        }
-        
+    // const expense = await Expense.findAll();
+    // const user = await User.findAll();
+    
+    const user = await User.findAll({
+        attributes: ['id','username',[sequelize.fn('sum',sequelize.col('expenses.amount')),'total_cost']],
+        include: [
+            {
+                model: Expense,
+                attributes: [] 
+            }
+        ],
+        group: ['users.id'],
+        order: [['total_cost',"DESC"]]
     })
-    const totlaExpenseWithUser =[];
-    user.forEach((user)=>{
-        totlaExpenseWithUser.push({user_name: user.username,total_expense: totalExpense[user.id] || 0})
-    })
-    totlaExpenseWithUser.sort((a,b)=>b.total_expense - a.total_expense);
-    res.status(201).json({success:true,totlaExpenseWithUser})
+    res.json(user)
+
 }
 
 

@@ -25,7 +25,7 @@ loginForm.addEventListener('submit',(e)=>{
     .catch((err)=>{
         console.log(err)
         let statusHTML = ``;
-        statusHTML+=`<font color="red">Error : `+err.response.message+`</font>`;
+        statusHTML+=`<font color="red">Error : `+err.response.data.message+`</font>`;
         document.getElementById('status').innerHTML = statusHTML
     });
 })
