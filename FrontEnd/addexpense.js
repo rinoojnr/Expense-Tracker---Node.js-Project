@@ -20,12 +20,13 @@ function parseJwt (token) {
     return JSON.parse(jsonPayload);
 }
 
-function showButton(name){
+function showButton(){ 
     let statusHTML = ``;
-        statusHTML+=``;
-        statusHTML+=`<font color="red"> is premium user now </font>`;
-        document.getElementById('status').innerHTML = statusHTML;
-        document.getElementById('payment-button').style.visibility = 'hidden';
+    statusHTML+=``;
+    statusHTML+=` You are a premium user now `;
+    document.getElementById('status').innerHTML = statusHTML;
+    document.getElementById('payment-button').style.visibility = 'hidden';
+    document.getElementById('show-leaderboard').style.visibility = 'visible'
 }
 
 window.addEventListener('DOMContentLoaded',()=>{
@@ -76,13 +77,14 @@ buyPremiumButton.addEventListener('click',async(e)=>{
                 },{headers: {"Authentication": token}})
             alert("You are a premium user now")
             localStorage.setItem("isPremium",true)
-            let statusHTML = ``;
-            statusHTML+=``;
-            statusHTML+=`<font color="red"> You are a premium user now </font>`;
-            document.getElementById('status').innerHTML = statusHTML;
-            document.getElementById('payment-button').style.visibility = 'hidden';
+            // let statusHTML = ``;
+            // statusHTML+=``;
+            // statusHTML+=`<font color="red"> You are a premium user now </font>`;
+            // document.getElementById('status').innerHTML = statusHTML;
+            // document.getElementById('payment-button').style.visibility = 'hidden';
             console.log(res2)
-            localStorage.setItem('token',res2.data.token)
+            localStorage.setItem('token',res2.data.token);
+            showButton()
             }
     }
     const rzp1 = new Razorpay(options);
@@ -129,13 +131,11 @@ function showOnScreen(data){
     }
 }
 
-
 showLeaderBoard.addEventListener('click',(e)=>{
     e.preventDefault();
     const token = localStorage.getItem("token")
     axios.get(`${baseURL}/premium/leaderboard`,{headers: {"Authentication": token}})
     .then((res)=>{
-        console.log(res,"/////")
         for(let i=0;i<res.data.length;i++){
             showLeaderBoardFunction(res.data[i])
         }
@@ -143,6 +143,7 @@ showLeaderBoard.addEventListener('click',(e)=>{
     
     })
 })
+
 
 
 function showLeaderBoardFunction(data){
