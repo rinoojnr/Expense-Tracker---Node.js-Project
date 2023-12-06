@@ -63,7 +63,7 @@ const getLeaderBoard = async(req,res) =>{
             }
         ],
         group: ['users.id'],
-        order: [['total_cost',"DESC"]]
+        order: [['totalexpense',"DESC"]]
     })
     res.json(user)
 

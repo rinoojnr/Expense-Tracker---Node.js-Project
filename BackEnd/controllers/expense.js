@@ -1,10 +1,18 @@
 const jsw = require('jsonwebtoken');
 
 const Expense = require('../models/addexpense');
+const User = require('../models/signup');
 
 exports.addExpense = async(req,res) =>{
     const { amount, description, category} = req.body;
     const expenseData = await Expense.create({amount,description,category,userId:req.user.id});
+    const totalexpense = Number(req.user.totalexpense)+Number(amount);
+    User.update({
+        totalexpense: totalexpense
+    },{
+        where: {id:req.user.id}
+    })
+
     res.status(201).json(expenseData)
 }
 
