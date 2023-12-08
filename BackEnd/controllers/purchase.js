@@ -11,8 +11,8 @@ const sequelize = require('../util/database');
 const purchasepremium = async(req,res) =>{
     try{
         var rzp = new Razorpay({
-            key_id: 'rzp_test_DqjWZYpFuc6765',
-            key_secret: 'jRLGvPwC9KsFnDZgl4JF1yq4'
+            key_id: process.env.RAZORPAY_KEY_ID,
+            key_secret: process.env.RAZORPAY_KEY_SECRET
         })
         
         const amount = 2500;

@@ -1,6 +1,11 @@
+const fs = require('fs');
+
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const helmet  = require('helmet');
+const compression = require('compression');
+const morgan = require('morgan');
 
 const sequelize = require('./util/database');
 
@@ -29,8 +34,15 @@ const corsOpts = {
     ],
   };
 
+
+const accessLogStream = fs.createWriteStream('access.log')
+
 app.use(bodyParser.json());
 app.use(cors());
+app.use(helmet());
+app.use(compression());
+app.use(morgan('combined',{stream:accessLogStream}));
+
 
 app.use(userRouter);
 app.use(expenseRouter);
@@ -46,6 +58,6 @@ Purchase.belongsTo(User)
 
 sequelize.sync()
 .then((response)=>{
-    app.listen(3000);
+    app.listen(process.env.PORT_NUMBER ||3000);
 }).catch(err=>console.log(err));
 
