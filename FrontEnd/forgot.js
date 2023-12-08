@@ -5,5 +5,5 @@ let baseURL ='http://localhost:3000';
 emailForm.addEventListener('submit',(e)=>{
     e.preventDefault();
     const mailid = mail.value;
-    axios.post(`https://api.brevo.com/v3/`,{email: mailid})
+    axios.get(`password/forgot`)
 });
