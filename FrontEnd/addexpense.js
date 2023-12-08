@@ -6,7 +6,8 @@ let addedExpense = document.getElementById('addedexpense');
 let status = document.getElementById('status');
 let buyPremiumButton = document.getElementById('payment-button');
 let showLeaderBoard = document.getElementById('show-leaderboard');
-let leaderBoard = document.getElementById('ldrbd')
+let leaderBoard = document.getElementById('ldrbd');
+let downLoadButton = document.getElementById('download-button');
 
 let baseURL ='http://localhost:3000';
 
@@ -153,3 +154,25 @@ function showLeaderBoardFunction(data){
     li.appendChild(text);
     leaderBoard.appendChild(li);
 }
+
+downLoadButton.addEventListener('click',()=>{
+    let token = localStorage.getItem('token');
+    axios.get(`${baseURL}/user/download/`,{headers: {"Authentication": token} })
+    .then((response)=>{
+        if(response.status === 200){
+            let a = document.createElement('a');
+            a.href = response.data.fileUrl;
+            a.download = 'expense.txt';
+            a.click();
+        }else{
+            throw new Error(response.data.message);
+        }
+        
+    })
+    .catch((err)=>{
+        let statusHTML = ``;
+        statusHTML+=`<font color="red">Error : `+err.response.data.message+`</font>`;
+        document.getElementById('status').innerHTML = statusHTML
+    })
+})
+
