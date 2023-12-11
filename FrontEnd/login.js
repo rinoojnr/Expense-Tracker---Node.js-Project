@@ -20,7 +20,7 @@ loginForm.addEventListener('submit',(e)=>{
         alert("Login Successfully");
         console.log(res.data,"////////////////////////")
         localStorage.setItem('token',res.data.token)
-        window.location.href = "file:///home/anupama/Desktop/trackerApp/FrontEnd/addexpense.html";
+        window.location.href = "/home/anupama/Desktop/Sharpener Main/9.trackerApp/FrontEnd/addexpense.html";
     })
     .catch((err)=>{
         console.log(err)

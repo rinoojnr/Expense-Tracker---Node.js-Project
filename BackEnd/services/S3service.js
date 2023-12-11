@@ -1,22 +1,18 @@
 const AWS = require('aws-sdk');
 
 const uploadToS3 = (data,filename) => {
-    const BUCKET_NAME = '';
-    const IAM_USER_KEY = '';
-    const IAM_USER_SECRET = '';
-
     let s3bucket = new AWS.S3({
-        accessKeyId: IAM_USER_KEY,
-        secretAccessKey: IAM_USER_SECRET,
-        ACL: 'public-read'
+        accessKeyId: process.env.IAM_USER_KEY,
+        secretAccessKey: process.env.IAM_USER_SECRET,
 
     })
 
     // s3bucket.createBucket(()=>{  //WHEN NEEDED A NEW BUCKET
         var params = {
-            Bucket: BUCKET_NAME,
+            Bucket: process.env.BUCKET_NAME,
             Key: filename,
-            Body: data
+            Body: data,
+            ACL: 'public-read'
         }
         return new Promise((resolve,reject)=>{
             s3bucket.upload(params,(err,s3response)=>{
@@ -24,7 +20,7 @@ const uploadToS3 = (data,filename) => {
                     console.log(err)
                     reject(err);
                 }else{
-                    console.log('successw',s3response);
+                    console.log('success',s3response);
                     resolve(s3response.Location);   
                 }
             // });
