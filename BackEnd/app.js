@@ -1,4 +1,5 @@
 const fs = require('fs');
+const https = require('https');
 
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -11,7 +12,8 @@ const sequelize = require('./util/database');
 
 const User = require('./models/signup');
 const Expense = require('./models/addexpense');
-const Purchase =require('./models/purchase');
+const Purchase = require('./models/purchase');
+const Fpassword = require('./models/forgotpassword');
 
 const userRouter = require('./routes/user');
 const expenseRouter = require('./routes/expens');
@@ -20,22 +22,10 @@ const passwordRouter = require('./routes/password');
 const downloadRouter = require('./routes/download');
 
 const app = express();
+const accessLogStream = fs.createWriteStream('access.log');
+const privateKey = fs.readFileSync('server.key');
+const certificate = fs.readFileSync('server.cert');
 
-const corsOpts = {
-    origin: '*',
-  
-    methods: [
-      'GET',
-      'POST',
-    ],
-  
-    allowedHeaders: [
-      'Content-Type',
-    ],
-  };
-
-
-const accessLogStream = fs.createWriteStream('access.log')
 
 app.use(bodyParser.json());
 app.use(cors());
@@ -53,11 +43,15 @@ app.use(downloadRouter);
 User.hasMany(Expense);
 Expense.belongsTo(User);
 
-User.hasMany(Purchase)
-Purchase.belongsTo(User)
+User.hasMany(Purchase);
+Purchase.belongsTo(User);
+
+User.hasMany(Fpassword);
+Fpassword.belongsTo(User);
 
 sequelize.sync()
 .then((response)=>{
+  // https.createServer({key: privateKey,cert: certificate},app).listen(process.env.PORT_NUMBER ||3000)
     app.listen(process.env.PORT_NUMBER ||3000);
 }).catch(err=>console.log(err));
 

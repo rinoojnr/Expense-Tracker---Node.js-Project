@@ -21,6 +21,7 @@
     "nodemon": "^3.0.2"
   },
   "dependencies": {
+    "@sendgrid/mail": "^8.1.0",
     "aws-sdk": "^2.1513.0",
     "bcrypt": "^5.1.1",
     "body-parser": "^1.20.1",
@@ -35,6 +36,7 @@
     "nodemailer": "^6.9.7",
     "razorpay": "^2.9.2",
     "sequelize": "^6.35.1",
-    "sib-api-v3-sdk": "^8.5.0"
+    "sib-api-v3-sdk": "^8.5.0",
+    "uuid": "^8.3.2"
   }
 }
