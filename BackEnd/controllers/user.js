@@ -20,7 +20,7 @@ signUp = async(req,res)=>{
         });
         res.status(200).json(data);
     }catch(err){
-        res.status(403).json("Email address already in use!")
+        res.status(403).json({success:false,message: "Email address already in use!"})
     }   
 }
 
