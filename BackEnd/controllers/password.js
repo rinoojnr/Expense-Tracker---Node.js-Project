@@ -27,7 +27,7 @@ exports.forgotpassword = async (req, res) => {
                 html: `<h1>Click Here And Change Your Password</h1><br>
                 <a href="http://localhost:3000/password/resetpassword/${id}">Reset password</a>`
             }
-
+            
             sgMail
             .send(msg)
             .then((response) => {
