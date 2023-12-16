@@ -23,8 +23,8 @@ const downloadRouter = require('./routes/download');
 
 const app = express();
 const accessLogStream = fs.createWriteStream('access.log');
-const privateKey = fs.readFileSync('server.key');
-const certificate = fs.readFileSync('server.cert');
+// const privateKey = fs.readFileSync('server.key');
+// const certificate = fs.readFileSync('server.cert');
 
 
 app.use(bodyParser.json());

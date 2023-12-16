@@ -23,9 +23,9 @@ exports.forgotpassword = async (req, res) => {
             const msg = {
                 to: email,
                 from: 'rinoojnr2003@gmail.com',
-                subject: 'ForgotPassword',
-                text: 'please veryfy it is you..',
-                html: `<a href="http://localhost:3000/password/resetpassword/${id}">Reset password</a>`
+                subject: 'Hey user, lost your password?',
+                html: `<h1>Click Here And Change Your Password</h1><br>
+                <a href="http://localhost:3000/password/resetpassword/${id}">Reset password</a>`
             }
 
             sgMail

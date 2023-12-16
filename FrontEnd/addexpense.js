@@ -2,14 +2,29 @@ let amount = document.getElementById('amount');
 let description = document.getElementById('description')
 let category = document.getElementById('category');
 let addExpenseForm = document.getElementById('addexpense');
-let addedExpense = document.getElementById('addedexpense');
 let status = document.getElementById('status');
 let buyPremiumButton = document.getElementById('payment-button');
 let showLeaderBoard = document.getElementById('show-leaderboard');
 let leaderBoard = document.getElementById('ldrbd');
 let downLoadButton = document.getElementById('download-button');
+let paginationDiv = document.getElementById('pagination');
+let selectLimit = document. getElementById('select-limit');
+// let addedExpens = document.getElementById('addedexpense');
+// let deleteExpense = document.getElementById('delete-expense-div');
+
 
 let baseURL ='http://localhost:3000';
+// let baseURL ='http://51.20.132.39:3000';
+
+function selectLimits(){
+    const token = localStorage.getItem('token');
+    axios.get(`${baseURL}/expense/getexpense?page=${1}&limit=${selectLimit.value}`,{headers: {"Authentication" : token}})
+    .then((res)=>{
+        showPagination(res.data);
+        showOnScreen(res.data.expenses)
+    })
+    .catch(err=>console.log(err))
+}
 
 function parseJwt (token) {
     var base64Url = token.split('.')[1];
@@ -30,21 +45,21 @@ function showButton(){
     document.getElementById('show-leaderboard').style.visibility = 'visible'
 }
 
+
 window.addEventListener('DOMContentLoaded',()=>{
     const token = localStorage.getItem('token');
     // const isPremium = localStorage.getItem("isPremium");
     const decodedToken = parseJwt(token);
-    console.log(decodedToken)
     const isPremium = decodedToken.isPremium
     if(isPremium){
         showButton()
     }
-    axios.get(`${baseURL}/expense/getexpense`,{headers: {"Authentication" : token}})
+    let page = 1;
+    let sLimit = selectLimit.value;
+    axios.get(`${baseURL}/expense/getexpense?page=${page}&limit=${sLimit}`,{headers: {"Authentication" : token}})
     .then((res)=>{
-        console.log(res)
-        for(let i = 0;i<res.data.length;i++){
-            showOnScreen(res.data[i])
-        }
+        showPagination(res.data);
+        showOnScreen(res.data.expenses)
     })
     .catch(err=>console.log(err))
 })
@@ -60,8 +75,7 @@ addExpenseForm.addEventListener('submit',(e)=>{
     }
     axios.post(`${baseURL}/expense/addexpense`,expenseData,{headers: {"Authentication": token}})
     .then((res)=>{
-        showOnScreen(res.data)
-
+        refresh(1)
     }).catch(err=>console.log(err))
 });
 
@@ -105,31 +119,58 @@ buyPremiumButton.addEventListener('click',async(e)=>{
 
 
 
-
+function deleteItem(id) {
+    const token = localStorage.getItem("token")
+    axios.delete(`${baseURL}/expense/deleteexpense/${id}`,{headers:{"Authentication": token}})
+    .then((res)=>{
+        refresh(1)
+    })
+    .catch(err=>{
+        console.log(err);
+        let statusHTML = ``;
+        statusHTML+=`<font color="red">Error : `+err.response.data.message+`</font>`;
+        document.getElementById('status').innerHTML = statusHTML
+    })
+}
 
 function showOnScreen(data){
-    let li = document.createElement('li');
-    let text = document.createTextNode(`${data.category} -- ${data.description} -- ${data.amount}Rs.`);
-    li.appendChild(text);
-    let deleteButton = document.createElement('input');
-    deleteButton.type = 'button';
-    deleteButton.value = 'Delete Expense';
-    li.appendChild(deleteButton);
-    addedExpense.appendChild(li);
-    deleteButton.onclick = () =>{
-        console.log(data.id)
-        const token = localStorage.getItem("token")
-        axios.delete(`${baseURL}/expense/deleteexpense/${data.id}`,{headers:{"Authentication": token}})
-        .then((res)=>{
-            addedExpense.removeChild(li); 
-        })
-        .catch(err=>{
-            console.log(err);
-            let statusHTML = ``;
-            statusHTML+=`<font color="red">Error : `+err.response.data.message+`</font>`;
-            document.getElementById('status').innerHTML = statusHTML
-        })
-    }
+        let innerExpense = ``;
+        if(data.length){
+            for(let i=0;i<data.length;i++){
+                innerExpense+=`<li>${data[i].category} -- ${data[i].description} -- ${data[i].amount}Rs.`+
+                `<button type="button" id=${data[i].id} class=\"delete-buttton\" onclick="deleteItem(id)">`+`Delete Expense`+`</button>`+`</li>`;
+                document.getElementById('addedexpense').innerHTML = innerExpense;
+            }
+        }else{
+            document.getElementById('addedexpense').innerHTML = innerExpense;
+        }
+        
+
+
+    
+
+    // let li = document.createElement('li');
+    // let text = document.createTextNode(`${data.category} -- ${data.description} -- ${data.amount}Rs.`);
+    // li.appendChild(text);
+    // let deleteButton = document.createElement('input');
+    // deleteButton.type = 'button';
+    // deleteButton.value = 'Delete Expense';
+    // li.appendChild(deleteButton);
+    // addedExpense.appendChild(li);
+    // deleteButton.onclick = () =>{
+    //     console.log(data.id)
+    //     const token = localStorage.getItem("token")
+    //     axios.delete(`${baseURL}/expense/deleteexpense/${data.id}`,{headers:{"Authentication": token}})
+    //     .then((res)=>{
+    //         addedExpense.removeChild(li); 
+    //     })
+    //     .catch(err=>{
+    //         console.log(err);
+    //         let statusHTML = ``;
+    //         statusHTML+=`<font color="red">Error : `+err.response.data.message+`</font>`;
+    //         document.getElementById('status').innerHTML = statusHTML
+    //     })
+    // }
 }
 
 showLeaderBoard.addEventListener('click',(e)=>{
@@ -148,9 +189,10 @@ showLeaderBoard.addEventListener('click',(e)=>{
 
 
 function showLeaderBoardFunction(data){
-    console.log(data)
+    const username = data.username;
+    const total_cost = (data.totalexpense === null)? 0:data.totalexpense;
     let li = document.createElement('li');
-    let text = document.createTextNode(`Name: ${data.username} -- ${data.total_cost}Rs.`);
+    let text = document.createTextNode(`Name: ${username} -- ${total_cost}Rs.`);
     li.appendChild(text);
     leaderBoard.appendChild(li);
 }
@@ -176,3 +218,86 @@ downLoadButton.addEventListener('click',()=>{
     })
 })
 
+function showPagination({
+    curendPage,hasPrevPage,hasNextPage
+}){
+    if(hasPrevPage){
+        // let inner = ``;
+        // inner+=`<font color="red">Error :</font> `;
+        // document.getElementById('paginations').innerHTML = inner
+
+        // let prev = document.createElement('input');
+        // prev.type = "button";
+        // prev.value = "Previous"
+        // paginationDiv.appendChild(prev);
+        // prev.onclick = () =>{
+        //     getExpense(JSON.parse(curendPage)-1)
+        // }
+        let innerPrev = ``;
+        innerPrev+=`<input id=\"previous-buttton\" type = "button" value = "Previous">`;
+        document.getElementById('pagination-previous').innerHTML = innerPrev
+        document.getElementById('previous-buttton').onclick = function() {
+            getExpense(JSON.parse(curendPage)-1)
+        }
+    }else{
+        let innerPrev = ``;
+        document.getElementById('pagination-previous').innerHTML = innerPrev
+    }
+    if(curendPage){
+        // let curend = document.createElement('input');
+        // curend.type = "button";
+        // curend.value = curendPage;
+        // paginationDiv.appendChild(curend);
+        let innerCurrend = ``;
+        innerCurrend+=`<input type = "button" value = ${curendPage}>`;
+        document.getElementById('paginations-currend').innerHTML = innerCurrend
+    }
+    if(hasNextPage){
+    //     let next = document.createElement('input');
+    //     next.type = "button";
+    //     next.value = "Next"
+    //     paginationDiv.appendChild(next);
+    //     next.onclick = () =>{
+    //         getExpense(JSON.parse(curendPage)+1)
+    //     }
+        let innerNext = ``;
+        innerNext+=`<input id=\"next-buttton\" type = "button" value = "Next">`;
+        document.getElementById('paginations-next').innerHTML = innerNext
+        document.getElementById('next-buttton').onclick = function() {
+            getExpense(JSON.parse(curendPage)+1)
+            refresh(curendPage+1)
+        }
+    
+    }else{
+        let innerNext = ``;
+        document.getElementById('paginations-next').innerHTML = innerNext
+
+    }
+}
+
+
+function getExpense(page){
+    const token = localStorage.getItem('token');
+    const sLimit = selectLimit.value;
+    console.log(sLimit,"..");
+    axios.get(`${baseURL}/expense/getexpense?page=${page}&limit=${sLimit}`,{headers: {"Authentication": token}})
+    .then((res)=>{
+        showPagination(res.data)
+        showOnScreen(res.data.expenses)
+
+    })
+    .catch()
+}
+
+
+function refresh(c){
+    const token = localStorage.getItem('token');
+    let page = c;
+    let sLimit = selectLimit.value;
+    axios.get(`${baseURL}/expense/getexpense?page=${page}&limit=${sLimit}`,{headers: {"Authentication" : token}})
+    .then((res)=>{
+        showPagination(res.data);
+        showOnScreen(res.data.expenses)
+    })
+    .catch(err=>console.log(err))
+}

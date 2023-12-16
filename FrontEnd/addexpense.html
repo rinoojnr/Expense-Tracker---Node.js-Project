@@ -4,39 +4,62 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Expense App</title>
+    <link rel="stylesheet" href="./addexpense.css">
 </head>
 <body>
-    <form id="addexpense">
-        <label for="amount">Enter the Amount : </label>
-        <input type="number" id="amount">
-        <label for="description">Enter The Description : </label>
-        <input type="text" id="description">
-        <label for="category">Choose The category : </label>
-        <select id="category">
-            <option>Food</option>
-            <option>Rent</option>
-            <option>Travel</option>
-            <option>Fuel</option>
-            <option>Others</option>
-        </select>
-        <input type="submit" id="submit" value="Add Expense">
-    </form>
-    <div id="buyPremiumButtondiv">
-        <button type="submit"id="payment-button">Buy Premium</button>
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous"> -->
+    <div class="container">
+        <div class="sub-container">
+            <form id="addexpense">
+                <label for="amount">Enter the Amount : </label>
+                <input type="number" id="amount">
+                <label for="description">Enter The Description : </label>
+                <input type="text" id="description">
+                <label for="category">Choose The category : </label>
+                <select id="category">
+                    <option>Food</option>
+                    <option>Rent</option>
+                    <option>Travel</option>
+                    <option>Fuel</option>
+                    <option>Others</option>
+                </select>
+                <input type="submit" id="submit" value="Add Expense">
+            </form>
+            <div id="buyPremiumButtondiv">
+                <button type="submit"id="payment-button">Buy Premium</button>
+            </div>
+            <div id="dowloadbuttondiv">
+                <button type="submit"id="download-button">Download</button>
+            </div>
+            
+            <button type="submit"id="show-leaderboard" style="visibility: hidden;">Show Leader Board</button>
+            <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+            <div id="status"></div>
+            <div style="display: flex; flex-direction: row;">
+                <div id="addedexpense"></div>
+                <div id="delete-expense-div"></div>
+            </div>
+            <div>
+                <ul id="ldrbd"></ul>
+            </div>
+            Select The Limit:
+            <select id="select-limit" onchange="selectLimits()">
+                <option>3</option>
+                <option>5</option>
+                <option>10</option>
+                <option>15</option>
+            </select>
+            <div style="display: flex; flex-direction: row;">
+                <div id="pagination-previous"></div>
+                <div id="paginations-currend"></div>
+                <div id="paginations-next"></div>
+                
+            </div>
+        </div>
     </div>
-    <div id="dowloadbuttondiv">
-        <button type="submit"id="download-button">Download</button>
-    </div>
+    <!-- <div class="pagination" id="pagination">
+    </div> -->
     
-    <button type="submit"id="show-leaderboard" style="visibility: hidden;">Show Leader Board</button>
-    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-    <div id="status"></div>
-    <div>
-        <ol id="addedexpense"></ul>
-    </div>
-    <div>
-        <ul id="ldrbd"></ul>
-    </div>
     <script src="addexpense.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.5.1/axios.min.js"></script>
 </body>
