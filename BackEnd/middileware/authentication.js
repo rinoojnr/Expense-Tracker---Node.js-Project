@@ -4,14 +4,17 @@ const User = require('../models/signup');
 
 
 
-const authentication = (req,res,next) =>{
-    const token = req.header("Authentication");
-    const user = jsw.verify(token,"strongpassword");
-    User.findByPk(user.userId).then((user)=>
-    {
+const authentication = async(req,res,next) =>{
+    try{
+        const token = req.header("Authentication");
+        const decoded = jsw.verify(token,"strongpassword");
+        const user = await User.findByPk(decoded.userId)
         req.user = user;
         next();
-    }).catch(err=>console.log(err));
+    }catch(err){
+        res.status(400).json({success:false,message:"Authentication denied"})
+    }
+    
     
 }
 

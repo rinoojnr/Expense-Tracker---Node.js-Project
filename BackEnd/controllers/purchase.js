@@ -54,17 +54,18 @@ const getLeaderBoard = async(req,res) =>{
     // const expense = await Expense.findAll();
     // const user = await User.findAll();
     
-    const user = await User.findAll({
-        attributes: ['id','username',[sequelize.fn('sum',sequelize.col('expenses.amount')),'total_cost']],
-        include: [
-            {
-                model: Expense,
-                attributes: [] 
-            }
-        ],
-        group: ['users.id'],
-        order: [['totalexpense',"DESC"]]
-    })
+    // const user = await User.findAll({
+    //     attributes: ['id','username',[sequelize.fn('sum',sequelize.col('expenses.amount')),'total_cost']],
+    //     include: [
+    //         {
+    //             model: Expense,
+    //             attributes: [] 
+    //         }
+    //     ],
+    //     group: ['users.id'],
+    //     order: [['totalexpense',"DESC"]]
+    // })
+    const user = await User.findAll({attributes: ['username','totalexpense'], order: [['totalexpense', 'DESC']]});
     res.json(user)
 
 }
