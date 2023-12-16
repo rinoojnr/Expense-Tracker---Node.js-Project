@@ -20,6 +20,7 @@ const expenseRouter = require('./routes/expens');
 const purchaseRouter = require('./routes/purchase');
 const passwordRouter = require('./routes/password');
 const downloadRouter = require('./routes/download');
+const path = require('path');
 
 const app = express();
 const accessLogStream = fs.createWriteStream('access.log');
@@ -29,7 +30,8 @@ const accessLogStream = fs.createWriteStream('access.log');
 
 app.use(bodyParser.json());
 app.use(cors());
-app.use(helmet());
+// app.use(helmet());
+app.use( helmet({ contentSecurityPolicy: false }) );
 app.use(compression());
 app.use(morgan('combined',{stream:accessLogStream}));
 
@@ -39,6 +41,13 @@ app.use(expenseRouter);
 app.use(purchaseRouter);
 app.use(passwordRouter);
 app.use(downloadRouter);
+
+app.use((req,res)=>{
+  res.sendFile(path.join(__dirname,`public/${req.url}`))
+})
+// app.use((req,res)=>{
+//   res.set('Content-Security-Policy', csp)
+// })
 
 User.hasMany(Expense);
 Expense.belongsTo(User);

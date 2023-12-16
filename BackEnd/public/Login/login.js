@@ -18,9 +18,8 @@ loginForm.addEventListener('submit',(e)=>{
         statusHTML+=``;
         document.getElementById('status').innerHTML = statusHTML;
         alert("Login Successfully");
-        console.log(res.data,"////////////////////////")
         localStorage.setItem('token',res.data.token)
-        window.location.href = "/home/anupama/Desktop/Sharpener Main/9.trackerApp/FrontEnd/addexpense.html";
+        window.location.href = "/AddExpense/addexpense.html";
     })
     .catch((err)=>{
         console.log(err)

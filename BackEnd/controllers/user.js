@@ -31,7 +31,6 @@ auth = (id,isPremium) =>{
 
 login = async(req,res) =>{
     try{
-        console.log(req.body,"============");
         let data = await Users.findAll({where: {useremail:req.body.email}});
         if(data.length === 0){
             res.status(404).json({success:false,message:"User not found"})
@@ -51,18 +50,6 @@ login = async(req,res) =>{
 
 
    
-    
-    // console.log(data)
-    // if(data.length===0){
-    //     res.status(404).json("User not found");
-    // }else{
-    //     if(data[0].userpassword != req.body.password){
-    //         res.status(401).json("Password Is Incorrect")
-    //     }else{
-    //         res.status(201).json(`${data[0].username} is Login Successfully`)
-    //     }
-        
-    // }
     
 }
 
