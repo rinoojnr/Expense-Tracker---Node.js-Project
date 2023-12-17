@@ -13,8 +13,8 @@ let selectLimit = document. getElementById('select-limit');
 // let deleteExpense = document.getElementById('delete-expense-div');
 
 
-let baseURL ='http://localhost:3000';
-// let baseURL ='http://51.20.132.39:3000';
+// let baseURL ='http://localhost:3000';
+let baseURL ='http://http://16.16.213.212/:3000';
 
 function selectLimits(){
     const token = localStorage.getItem('token');
