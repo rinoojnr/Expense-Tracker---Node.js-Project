@@ -1,9 +1,10 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Signup</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
+    <!-- <meta http-equiv="Content-Security-Policy" content="default-src *; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval' http://www.google.com"> -->
+    <!-- <title>Signup</title>
 </head>
 <body>
     <form id="signup" method="POST">
@@ -17,6 +18,49 @@
     </form>
     <a href="/Login/login.html">Existing-User-Login</a>
     <div id="status"></div>
+    <script src="signup.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.5.1/axios.min.js"></script>
+</body>
+</html> -->
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+	<link rel="stylesheet" href="signup.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<title>SignUp</title>
+</head>
+<body>
+	<div class="container" id="container">
+		<div class="form-container log-in-container">
+			<form id="signup" method="POST">
+				<h1>SignUp</h1>
+				<div class="social-container">
+					<a href="#" class="social"><i class="fa fa-facebook fa-2x"></i></a>
+					<a href="#" class="social"><i class="fab fa fa-twitter fa-2x"></i></a>
+				</div>
+				<span>or use your account</span>
+                <input type="text" id="username" required placeholder="UserName">
+                <input type="email" id="useremail" required placeholder="Email">
+                <input type="password" id="userpassword" required placeholder="Password">
+                <a href="/Login/login.html">Existing-User-Login</a>
+                <div id="status"></div>
+                <input type="submit" id="submit" value="Login">
+			</form>
+		</div>
+		<div class="overlay-container">
+			<div class="overlay">
+				<div class="overlay-panel overlay-right">
+					<h1>Expense Tracker</h1>
+					<p>Smart spending starts here.Effortlessly track your expenses and gain financial knowledge.</p>
+				</div>
+			</div>
+		</div>
+	</div>
     <script src="signup.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.5.1/axios.min.js"></script>
 </body>

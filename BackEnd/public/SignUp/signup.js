@@ -3,8 +3,8 @@ let userEmail = document.getElementById('useremail');
 let userPassword = document.getElementById('userpassword');
 let signUpForm = document.getElementById('signup');
 let status = document.getElementById('status');
-// let baseURL ='http://localhost:3000';
-let baseURL ='http://http://16.16.213.212/:3000';
+let baseURL ='http://localhost:3000';
+// let baseURL ='http://http://16.16.213.212/:3000';
 
 
 

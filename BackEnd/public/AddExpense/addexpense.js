@@ -13,8 +13,8 @@ let selectLimit = document. getElementById('select-limit');
 // let deleteExpense = document.getElementById('delete-expense-div');
 
 
-// let baseURL ='http://localhost:3000';
-let baseURL ='http://http://16.16.213.212/:3000';
+let baseURL ='http://localhost:3000';
+// let baseURL ='http://16.16.213.212/:3000';
 
 function selectLimits(){
     const token = localStorage.getItem('token');
@@ -135,9 +135,13 @@ function deleteItem(id) {
 
 function showOnScreen(data){
         let innerExpense = ``;
+        if(data.length==0){
+            innerExpense+=`<font color="white"><h1 align="center" >No Expenses<h1></font>`
+            document.getElementById('addedexpense').innerHTML = innerExpense;
+        }
         if(data.length){
             for(let i=0;i<data.length;i++){
-                innerExpense+=`<li>${data[i].category} -- ${data[i].description} -- ${data[i].amount}Rs.`+
+                innerExpense+=`<li class="display-expense">${data[i].category} -- ${data[i].description} -- ${data[i].amount}Rs.`+
                 `<button type="button" id=${data[i].id} class=\"delete-buttton\" onclick="deleteItem(id)">`+`Delete Expense`+`</button>`+`</li>`;
                 document.getElementById('addedexpense').innerHTML = innerExpense;
             }
