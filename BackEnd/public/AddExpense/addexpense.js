@@ -9,12 +9,13 @@ let leaderBoard = document.getElementById('ldrbd');
 let downLoadButton = document.getElementById('download-button');
 let paginationDiv = document.getElementById('pagination');
 let selectLimit = document. getElementById('select-limit');
+let leaderBoaedContainer = document. getElementById('leader-board-container');
 // let addedExpens = document.getElementById('addedexpense');
 // let deleteExpense = document.getElementById('delete-expense-div');
 
 
-let baseURL ='http://localhost:3000';
-// let baseURL ='http://16.16.213.212/:3000';
+// let baseURL ='http://localhost:3000';
+let baseURL ='http://13.51.6.80/:3000';
 
 function selectLimits(){
     const token = localStorage.getItem('token');
@@ -185,6 +186,7 @@ showLeaderBoard.addEventListener('click',(e)=>{
         for(let i=0;i<res.data.length;i++){
             showLeaderBoardFunction(res.data[i])
         }
+        leaderBoaedContainer.scrollIntoView();
         console.log(res.data.totlaExpenseWithUser);
     
     })
@@ -196,6 +198,7 @@ function showLeaderBoardFunction(data){
     const username = data.username;
     const total_cost = (data.totalexpense === null)? 0:data.totalexpense;
     let li = document.createElement('li');
+    li.classList = "bottom-container-leaderboard"
     let text = document.createTextNode(`Name: ${username} -- ${total_cost}Rs.`);
     li.appendChild(text);
     leaderBoard.appendChild(li);

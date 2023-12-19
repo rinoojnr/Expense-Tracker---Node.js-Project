@@ -1,8 +1,8 @@
 let userEmail = document.getElementById('email');
 let userPassword = document.getElementById('password');
 let loginForm = document.getElementById('login');
-let baseURL ='http://localhost:3000';
-// let baseURL ='http://http://16.16.213.212/:3000';
+// let baseURL ='http://localhost:3000';
+let baseURL ='http://13.51.6.80/:3000';
 
 
 loginForm.addEventListener('submit',(e)=>{

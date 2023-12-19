@@ -191,4 +191,22 @@
     gap: 10px;
 }
 
+.leader-board-container {
+    width: 100%;
+    display: flex;
 
+}
+
+.leader-board {
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    background: -webkit-linear-gradient(to right, #648178, #81a69a);
+	background: linear-gradient(to right, #648178, #81a69a);
+    border-radius: 20px;
+}
+.bottom-container-leaderboard{
+    color: white;
+    margin-top: 20px;
+}
